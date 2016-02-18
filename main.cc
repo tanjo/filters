@@ -4,7 +4,8 @@
 #include "flag_manager.hh"
 
 int main(int argc, char *argv[]) {
-  FilterManager *manager = new FilterManager(argc, argv);
+
+  std::shared_ptr<tj::FilterManager> manager(new tj::FilterManager(argc, argv));
 
   cv::Mat src = cv::imread(manager->getFilePath());
 
@@ -114,6 +115,4 @@ int main(int argc, char *argv[]) {
   filename += "-" + manager->getFilterTypeName() + ".png";
   cv::imwrite(filename, dst);
   std::cout << "finish: " << filename << std::endl;
-
-  delete manager;
 }

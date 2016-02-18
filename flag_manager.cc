@@ -3,18 +3,18 @@
 DEFINE_string(type, "", "filter type ... grayscale, meanshift, red, green ,blue");
 DEFINE_string(file, "", "filename");
 
-FilterManager::FilterManager(int argc, char *argv[]) {
+tj::FilterManager::FilterManager(int argc, char *argv[]) {
   gflags::ParseCommandLineFlags(&argc, &argv, true);
 }
 
-std::string FilterManager::getFilterTypeName() {
+std::string tj::FilterManager::getFilterTypeName() {
   if (FLAGS_type.empty()) {
     return "Not Found";
   }
   return FLAGS_type;
 }
 
-int FilterManager::getFilterType() {
+int tj::FilterManager::getFilterType() {
   if (FLAGS_type.empty()) {
     return -1;
   }
@@ -32,7 +32,7 @@ int FilterManager::getFilterType() {
   return -1;
 }
 
-std::string FilterManager::getFilePath() {
+std::string tj::FilterManager::getFilePath() {
   if (FLAGS_file.empty()) {
     return NULL;
   }

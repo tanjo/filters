@@ -6,13 +6,17 @@
 #include <fstream>
 #include <string>
 
-class FilterManager {
-public:
-  FilterManager(int argc, char *argv[]);
+namespace tj {
 
-  int getFilterType();
-  std::string getFilterTypeName();
-  std::string getFilePath();
-};
+  class FilterManager {
+  public:
+      FilterManager(int argc, char *argv[]);
+
+      int getFilterType();
+      std::string getFilterTypeName();
+      std::string getFilePath();
+  };
+
+}
 
 #endif // __FLAG_MANAGER_HH__
