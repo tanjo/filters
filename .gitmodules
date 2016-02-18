@@ -1,0 +1,6 @@
+[submodule "opencv"]
+	path = opencv
+	url = git@github.com:Itseez/opencv.git
+[submodule "gflags"]
+	path = gflags
+	url = git@github.com:gflags/gflags.git
