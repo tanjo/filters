@@ -1,6 +1,6 @@
 #include "flag_manager.hh"
 
-DEFINE_string(type, "", "filter type ... grayscale, meanshift, red, green ,blue");
+DEFINE_string(type, "", "filter type ... grayscale, meanshift, red, green ,blue, revival, negative, emboss, sharp, gaussianblur, dot, simple");
 DEFINE_string(file, "", "filename");
 
 tj::FilterManager::FilterManager(int argc, char *argv[]) {
@@ -19,15 +19,29 @@ int tj::FilterManager::getFilterType() {
     return -1;
   }
   if (FLAGS_type == "grayscale") {
-    return 1;
+    return GrayScale;
   } else if (FLAGS_type == "meanshift") {
-    return 2;
+    return MeanShift;
   } else if (FLAGS_type == "green") {
-    return 3;
+    return Green;
   } else if (FLAGS_type == "blue") {
-    return 4;
+    return Blue;
   } else if (FLAGS_type == "red") {
-    return 5;
+    return Red;
+  } else if (FLAGS_type == "revival") {
+    return Revival;
+  } else if (FLAGS_type == "negative") {
+    return Negative;
+  } else if (FLAGS_type == "emboss") {
+    return Emboss;
+  } else if (FLAGS_type == "sharp") {
+    return Sharp;
+  } else if (FLAGS_type == "gaussianblur") {
+    return GaussianBlur;
+  } else if (FLAGS_type == "dot") {
+    return Dot;
+  } else if (FLAGS_type == "simple") {
+    return Simple;
   }
   return -1;
 }

@@ -25,6 +25,18 @@ make
 ./filters
 ```
 
+## Run
+
+```
+./filters --type blue --file /Users/hoge/img.jpg
+```
+
+## Result
+
+```
+
+```
+
 # おまけ
 
 ```bash
