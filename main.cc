@@ -43,7 +43,7 @@ int main(int argc, char *argv[]) {
       std::vector<cv::Mat> mats;
       cv::split(hsv, mats);
       cv::Mat h1, h2;
-      cv::threshold(mats[0], h1, 35, 255, cv::THRESH_BINARY);
+      cv::threshold(mats[0], h1, 30, 255, cv::THRESH_BINARY);
       cv::threshold(mats[0], h2, 80, 255, cv::THRESH_BINARY_INV);
       cv::Mat mask = h1 & h2;
       cv::cvtColor(mask, mask, cv::COLOR_GRAY2BGR);
@@ -86,7 +86,7 @@ int main(int argc, char *argv[]) {
       cv::split(hsv, mats);
       cv::Mat h1, h2;
       cv::threshold(mats[0], h1, 135, 255, cv::THRESH_BINARY);
-      cv::threshold(mats[0], h2, 35, 255, cv::THRESH_BINARY_INV);
+      cv::threshold(mats[0], h2, 30, 255, cv::THRESH_BINARY_INV);
       cv::Mat mask = h1 | h2;
       cv::cvtColor(mask, mask, cv::COLOR_GRAY2BGR);
       cv::bitwise_and(src, mask, dst);
