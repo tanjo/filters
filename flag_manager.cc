@@ -48,7 +48,7 @@ int tj::FilterManager::getFilterType() {
 
 std::string tj::FilterManager::getFilePath() {
   if (FLAGS_file.empty()) {
-    return NULL;
+    return std::string();
   }
   return FLAGS_file;
 }

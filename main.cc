@@ -7,6 +7,17 @@ int main(int argc, char *argv[]) {
 
   std::shared_ptr<tj::FilterManager> manager(new tj::FilterManager(argc, argv));
 
+  if (manager->getFilterType() == -1) {
+    std::cout << "Error: ./filters --type XXX --file XXXXXX.jpg" << std::endl;
+    std::cout << "Filter List: GrayScale, MeanShift, Green, Blue, Red, Revival, Negative, Emboss, Sharp, GaussianBlur, Dot, Simple" << std::endl;
+    return -1;
+  }
+
+  if (manager->getFilePath().empty()||manager->getFilePath().length() == 0) {
+    std::cout << "Error: ./filters --type XXX --file XXXXXX.jpg" << std::endl;
+    return -1;
+  }
+
   cv::Mat src = cv::imread(manager->getFilePath(), cv::IMREAD_UNCHANGED);
   std::vector<cv::Mat> src_mv;
   cv::split(src, src_mv);

@@ -20,7 +20,7 @@ pushd glfags
     make install
   popd
 popd
-cmake ..
+cmake .
 make
 ./filters
 ```
