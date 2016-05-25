@@ -9,18 +9,17 @@
 namespace tj {
 
   enum FilterType {
-    GrayScale = 1,
-    MeanShift = 2,
-    Green = 3,
-    Blue = 4,
-    Red = 5,
-    Revival = 6,
-    Negative = 7,
-    Emboss = 8,
-    Sharp = 9,
-    GaussianBlur = 10,
-    Dot = 11,
-    Simple = 12
+    GrayScale = 0,
+    MeanShift,
+    Green,
+    Blue,
+    Red,
+    Negative,
+    Emboss,
+    Sharp,
+    GaussianBlur,
+    Dot,
+    Simple
   };
 
   class FilterManager {

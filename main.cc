@@ -2,6 +2,15 @@
 #include <vector>
 #include <opencv2/opencv.hpp>
 #include "flag_manager.hh"
+#include "grayscale_filter.hh"
+#include "green_filter.hh"
+#include "blue_filter.hh"
+#include "red_filter.hh"
+#include "meanshift_filter.hh"
+#include "negative_filter.hh"
+#include "emboss_filter.hh"
+#include "gaussianblur_filter.hh"
+#include "sharp_filter.hh"
 
 int main(int argc, char *argv[]) {
 
@@ -28,120 +37,56 @@ int main(int argc, char *argv[]) {
   }
   src = cv::imread(manager->getFilePath());
   cv::Mat dst = src.clone();
+  std::shared_ptr<tj::BaseFilter> p;
 
+  std::cout << manager->getFilterTypeName() << " processing ..." << std::endl;
   switch (manager->getFilterType()) {
     case tj::GrayScale: {
-      std::cout << "grayscale processing ..." << std::endl;
-      cv::cvtColor(src, dst, cv::COLOR_BGR2GRAY);
+      p.reset(new tj::GrayScaleFilter());
+      dst = p->apply(src);
       break;
     }
     case tj::MeanShift: {
-        std::cout << "meanshift processing ..." << std::endl;
-        float sp = 30.0; // 空間窓の半径
-        float sr = 30.0; // 色空間窓の半径
-        int max_level = 2;
-        CvTermCriteria termcrit = CvTermCriteria(CV_TERMCRIT_ITER+CV_TERMCRIT_EPS, 5, 1);
-        cv::pyrMeanShiftFiltering(src, dst, sp, sr, max_level, termcrit);
-        break;
+      p.reset(new tj::MeanShiftFilter());
+      dst = p->apply(src);
+      break;
     }
     case tj::Green: {
-      std::cout << "only green processing ..." << std::endl;
-      cv::Mat gray;
-      cv::cvtColor(src, gray, cv::COLOR_BGR2GRAY);
-      cv::cvtColor(gray, gray, cv::COLOR_GRAY2BGR);
-      cv::Mat hsv;
-      cv::cvtColor(src, hsv, cv::COLOR_BGR2HSV);
-      std::vector<cv::Mat> mats;
-      cv::split(hsv, mats);
-      cv::Mat h1, h2;
-      cv::threshold(mats[0], h1, 20, 255, cv::THRESH_BINARY);
-      cv::threshold(mats[0], h2, 80, 255, cv::THRESH_BINARY_INV);
-      cv::Mat mask = h1 & h2;
-      cv::cvtColor(mask, mask, cv::COLOR_GRAY2BGR);
-      cv::bitwise_and(src, mask, dst);
-      mask = ~mask;
-      cv::Mat gray2;
-      cv::bitwise_and(gray, mask, gray2);
-      dst = dst + gray2;
+      p.reset(new tj::GreenFilter());
+      dst = p->apply(src);
       break;
     }
     case tj::Blue: {
-      std::cout << "only blue processing ..." << std::endl;
-      cv::Mat gray;
-      cv::cvtColor(src, gray, cv::COLOR_BGR2GRAY);
-      cv::cvtColor(gray, gray, cv::COLOR_GRAY2BGR);
-      cv::Mat hsv;
-      cv::cvtColor(src, hsv, cv::COLOR_BGR2HSV);
-      std::vector<cv::Mat> mats;
-      cv::split(hsv, mats);
-      cv::Mat h1, h2;
-      cv::threshold(mats[0], h1, 80, 255, cv::THRESH_BINARY);
-      cv::threshold(mats[0], h2, 135, 255, cv::THRESH_BINARY_INV);
-      cv::Mat mask = h1 & h2;
-      cv::cvtColor(mask, mask, cv::COLOR_GRAY2BGR);
-      cv::bitwise_and(src, mask, dst);
-      mask = ~mask;
-      cv::Mat gray2;
-      cv::bitwise_and(gray, mask, gray2);
-      dst = dst + gray2;
+      p.reset(new tj::BlueFilter());
+      dst = p->apply(src);
       break;
     }
     case tj::Red: {
-      std::cout << "only red processing ..." << std::endl;
-      cv::Mat gray;
-      cv::cvtColor(src, gray, cv::COLOR_BGR2GRAY);
-      cv::cvtColor(gray, gray, cv::COLOR_GRAY2BGR);
-      cv::Mat hsv;
-      cv::cvtColor(src, hsv, cv::COLOR_BGR2HSV);
-      std::vector<cv::Mat> mats;
-      cv::split(hsv, mats);
-      cv::Mat h1, h2;
-      cv::threshold(mats[0], h1, 135, 255, cv::THRESH_BINARY);
-      cv::threshold(mats[0], h2, 20, 255, cv::THRESH_BINARY_INV);
-      cv::Mat mask = h1 | h2;
-      cv::cvtColor(mask, mask, cv::COLOR_GRAY2BGR);
-      cv::bitwise_and(src, mask, dst);
-      mask = ~mask;
-      cv::Mat gray2;
-      cv::bitwise_and(gray, mask, gray2);
-      dst = dst + gray2;
+      p.reset(new tj::RedFilter());
+      dst = p->apply(src);
       break;
     }
-    case tj::Revival: {
-      // 参考：色特徴のコード化を用いた画像の色復元
-      std::cout << "Sorry, comming soon." << std::endl;
-      return -1;
-    }
     case tj::Negative: {
-      std::cout << "negative processing ..." << std::endl;
-      dst = ~dst;
+      p.reset(new tj::NegativeFilter());
+      dst = p->apply(src);
       break;
     }
     case tj::Emboss: {
-      std::cout << "emboss processing ..." << std::endl;
-      cv::Mat kernel = (cv::Mat_<float>(3, 3) <<
-        -1, -1, 0,
-        -1,  1, 1,
-         0,  1, 1);
-      cv::filter2D(src, dst, -1, kernel);
+      p.reset(new tj::EmbossFilter());
+      dst = p->apply(src);
       break;
     }
     case tj::Sharp: {
-      std::cout << "median processing ..." << std::endl;
-      cv::Mat kernel = (cv::Mat_<float>(3, 3) <<
-         0, -1,  0,
-        -1,  5, -1,
-         0, -1,  0);
-      cv::filter2D(src, dst, -1, kernel);
+      p.reset(new tj::SharpFilter());
+      dst = p->apply(src);
       break;
     }
     case tj::GaussianBlur: {
-      std::cout << "median processing ..." << std::endl;
-      cv::blur(src, dst, cv::Size(5, 5));
+      p.reset(new tj::GaussianBlurFilter());
+      dst = p->apply(src);
       break;
     }
     case tj::Dot: {
-      std::cout << "dot processing ..." << std::endl;
       cv::Mat reshaped = src.reshape(1, src.cols * src.rows);
       cv::Mat reshaped32f;
       reshaped.convertTo(reshaped32f, CV_32FC1, 1.0 / 255.0);
@@ -169,7 +114,6 @@ int main(int argc, char *argv[]) {
       break;
     }
     case tj::Simple: {
-      std::cout << "simple processing ..." << std::endl;
       cv::Mat reshaped = src.reshape(1, src.cols * src.rows);
       cv::Mat reshaped32f;
       reshaped.convertTo(reshaped32f, CV_32FC1, 1.0 / 255.0);
@@ -200,8 +144,6 @@ int main(int argc, char *argv[]) {
       return -1;
     }
   }
-
-  printf("%d\n", dst.channels());
 
   if (dst.channels() == 1) {
     cv::cvtColor(dst, dst, cv::COLOR_GRAY2BGR);

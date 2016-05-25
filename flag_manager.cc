@@ -28,8 +28,6 @@ int tj::FilterManager::getFilterType() {
     return Blue;
   } else if (FLAGS_type == "red") {
     return Red;
-  } else if (FLAGS_type == "revival") {
-    return Revival;
   } else if (FLAGS_type == "negative") {
     return Negative;
   } else if (FLAGS_type == "emboss") {
