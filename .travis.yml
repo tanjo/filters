@@ -1,4 +1,5 @@
 language: cpp
+sudo: required
 before_install:
   - ./travis_setup.sh
 script:
