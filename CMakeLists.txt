@@ -5,7 +5,21 @@ project(filters)
 find_package(OpenCV REQUIRED)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
-set(SOURCE_FILES main.cc flag_manager.cc base_filter.cc grayscale_filter.cc green_filter.cc blue_filter.cc red_filter.cc meanshift_filter.cc negative_filter.cc emboss_filter.cc gaussianblur_filter.cc sharp_filter.cc)
+set(SOURCE_FILES
+    src/main.cc
+    src/flag_manager.cc
+    src/base_filter.cc
+    src/grayscale_filter.cc
+    src/green_filter.cc
+    src/blue_filter.cc
+    src/red_filter.cc
+    src/meanshift_filter.cc
+    src/negative_filter.cc
+    src/emboss_filter.cc
+    src/gaussianblur_filter.cc
+    src/sharp_filter.cc
+    src/dot_filter.cc
+    src/simple_filter.cc)
 
 set(gflags_SHARED FALSE)
 set(gflags_NOTHREADS FALSE)
