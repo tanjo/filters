@@ -19,7 +19,8 @@ set(SOURCE_FILES
     src/gaussianblur_filter.cc
     src/sharp_filter.cc
     src/dot_filter.cc
-    src/simple_filter.cc)
+    src/simple_filter.cc
+    src/affine_filter.cc)
 
 set(gflags_SHARED FALSE)
 set(gflags_NOTHREADS FALSE)

@@ -19,7 +19,8 @@ namespace tj {
     Sharp,
     GaussianBlur,
     Dot,
-    Simple
+    Simple,
+    Affine
   };
 
   class FilterManager {

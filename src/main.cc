@@ -13,22 +13,19 @@
 #include "sharp_filter.hh"
 #include "dot_filter.hh"
 #include "simple_filter.hh"
+#include "affine_filter.hh"
 
 int main(int argc, char *argv[]) {
 
   std::shared_ptr<tj::FilterManager> manager(new tj::FilterManager(argc, argv));
 
-  if (manager->getFilterType() == -1) {
+  if (manager->getFilterType() == -1 || manager->getFilePath().empty() || manager->getFilePath().length() == 0) {
     std::cout << "Error: ./filters --type XXX --file XXXXXX.jpg" << std::endl;
     std::cout << "Filter List: GrayScale, MeanShift, Green, Blue, Red, Revival, Negative, Emboss, Sharp, GaussianBlur, Dot, Simple" << std::endl;
     return -1;
   }
 
-  if (manager->getFilePath().empty()||manager->getFilePath().length() == 0) {
-    std::cout << "Error: ./filters --type XXX --file XXXXXX.jpg" << std::endl;
-    return -1;
-  }
-
+  // remove alpha channel
   cv::Mat src = cv::imread(manager->getFilePath(), cv::IMREAD_UNCHANGED);
   std::vector<cv::Mat> src_mv;
   cv::split(src, src_mv);
@@ -38,76 +35,60 @@ int main(int argc, char *argv[]) {
     alpha = src_mv[3].clone();
   }
   src = cv::imread(manager->getFilePath());
-  cv::Mat dst = src.clone();
+  cv::Mat dst;
   std::shared_ptr<tj::BaseFilter> p;
 
   std::cout << manager->getFilterTypeName() << " processing ..." << std::endl;
   switch (manager->getFilterType()) {
-    case tj::GrayScale: {
+    case tj::GrayScale:
       p.reset(new tj::GrayScaleFilter());
-      dst = p->apply(src);
       break;
-    }
-    case tj::MeanShift: {
+    case tj::MeanShift:
       p.reset(new tj::MeanShiftFilter());
-      dst = p->apply(src);
       break;
-    }
-    case tj::Green: {
+    case tj::Green:
       p.reset(new tj::GreenFilter());
-      dst = p->apply(src);
       break;
-    }
-    case tj::Blue: {
+    case tj::Blue:
       p.reset(new tj::BlueFilter());
-      dst = p->apply(src);
       break;
-    }
-    case tj::Red: {
+    case tj::Red:
       p.reset(new tj::RedFilter());
-      dst = p->apply(src);
       break;
-    }
-    case tj::Negative: {
+    case tj::Negative:
       p.reset(new tj::NegativeFilter());
-      dst = p->apply(src);
       break;
-    }
-    case tj::Emboss: {
+    case tj::Emboss:
       p.reset(new tj::EmbossFilter());
-      dst = p->apply(src);
       break;
-    }
-    case tj::Sharp: {
+    case tj::Sharp:
       p.reset(new tj::SharpFilter());
-      dst = p->apply(src);
       break;
-    }
-    case tj::GaussianBlur: {
+    case tj::GaussianBlur:
       p.reset(new tj::GaussianBlurFilter());
-      dst = p->apply(src);
       break;
-    }
-    case tj::Dot: {
+    case tj::Dot:
       p.reset(new tj::DotFilter());
-      dst = p->apply(src);
       break;
-    }
-    case tj::Simple: {
+    case tj::Simple:
       p.reset(new tj::SimpleFilter());
-      dst = p->apply(src);
       break;
-    }
-    default: {
+    case tj::Affine:
+      p.reset(new tj::AffineFilter());
+      break;
+    default:
       std::cout << "can't be processed" << std::endl;
       return -1;
-    }
   }
+
+  // run
+  dst = p->apply(src);
 
   if (dst.channels() == 1) {
     cv::cvtColor(dst, dst, cv::COLOR_GRAY2BGR);
   }
 
+  // add alpha channel
   if (channel == 4) {
     std::vector<cv::Mat> dst_mv;
     cv::split(dst, dst_mv);
@@ -115,6 +96,7 @@ int main(int argc, char *argv[]) {
     cv::merge(dst_mv, dst);
   }
 
+  // save image
   std::string filename = manager->getFilePath();
   std::vector<int> compression_params;
   compression_params.push_back(CV_IMWRITE_PNG_COMPRESSION);
