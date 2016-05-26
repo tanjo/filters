@@ -3,3 +3,7 @@ before_install:
   - ./travis_setup.sh
 script:
   - ./build.sh
+branches:
+  only:
+    - develop
+    - master

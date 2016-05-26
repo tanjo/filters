@@ -1,5 +1,7 @@
 # filters
 
+[![Build Status](https://travis-ci.org/tanjo/filters.svg?branch=master)](https://travis-ci.org/tanjo/filters)
+
 # はじめに
 
 ```bash
