@@ -31,20 +31,6 @@ make
 ./filters --type blue --file /Users/hoge/img.jpg
 ```
 
-## Result
-
-```
-
-```
-
-# おまけ
-
-```bash
-cmake -GXcode .
-```
-
-で Xcode のプロジェクトが作成されて便利
-
 # Result
 
 ## Original
