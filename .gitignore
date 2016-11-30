@@ -5,10 +5,6 @@ Makefile
 cmake_install.cmake
 filters
 
-# Submodules
-gflags/
-opencv/
-
 # CLion
 .idea/
 
